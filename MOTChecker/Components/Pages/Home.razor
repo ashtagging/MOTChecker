@@ -1,7 +1,49 @@
 ﻿@page "/"
+@using MOTChecker.Models
+@using Newtonsoft.Json
+
+@rendermode InteractiveServer
+@inject IHttpClientFactory HttpClientFactory;
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>MOT Checker</h1>
+<button @onclick="@GetData">Get Details</button>
 
-Welcome to your new app.
+@if(vehicleDetails != null)
+{
+    <p>@vehicleDetails.Make</p>
+    <p>@vehicleDetails.Model</p>
+    <p>@vehicleDetails.PrimaryColour</p>
+    <p>@vehicleDetails.MotTests?[0].ExpiryDate</p>
+    <p>@vehicleDetails.MotTests?[0].OdometerValue</p>
+}
+
+@code {
+    private VehicleDetails vehicleDetails;
+    private string myreg = "DS11EYX";
+    private string testResult = "";
+
+    private async Task GetData()
+    {
+        var httpClient = HttpClientFactory.CreateClient();
+        var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={myreg}");
+
+        request.Headers.Add("x-api-key", "fZi8YcjrZN1cGkQeZP7Uaa4rTxua8HovaswPuIno");
+
+        //Submit request
+        var response = await httpClient.SendAsync(request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            // falls over on this line           
+            var data = await response.Content.ReadFromJsonAsync<List<VehicleDetails>>();
+
+            if (data != null && data.Count > 0)
+            {
+                vehicleDetails = data[0]; // Assuming you want the first result
+                testResult = JsonConvert.SerializeObject(vehicleDetails, Formatting.Indented);               
+            }
+        }
+    }
+}
