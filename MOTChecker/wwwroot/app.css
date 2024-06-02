@@ -1,42 +1,65 @@
-:root {
-    font-size: 20px;
-}
-
-*,
-*:before,
-*:after {
-    box-sizing: border-box;
-}
-
 body {
     font: 1em/1.618 Inter, sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    padding: 30px;
     margin: 0;
-    color: #224;
     background: url(https://images.unsplash.com/photo-1594787317554-dcc17c53f741?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D) center / cover no-repeat fixed;
 }
 
 .card {
-    max-width: 300px;
-    min-height: 200px;
+    width: 30rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    max-width: 500px;
-    height: 300px;
     padding: 35px;
     border: 1px solid rgba(255, 255, 255, .25);
     border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.45);
+    background-color: rgba(255, 255, 255, 0.75);
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(15px);
 }
 
-.card-footer {
-    font-size: 0.65em;
-    color: #446;
+.card-text {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.title-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: darkgray;
+}
+
+.search-wrapper {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.search-bar {
+    width: 80%;
+    border: 3px solid grey;
+    border-right: none;
+    padding: 5px;
+    height: 20px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: black;
+}
+
+.search-button {
+    width: 20%;
+    height: 36px;
+    border: 1px solid grey;
+    background: grey;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 20px;
 }

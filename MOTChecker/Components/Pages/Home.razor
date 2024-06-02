@@ -4,59 +4,47 @@
 @using Newtonsoft.Json
 
 @rendermode InteractiveServer
-@inject IHttpClientFactory HttpClientFactory;
 @inject IVehicleService VehicleService
 
 <PageTitle>MOT Checker</PageTitle>
 
 <div class="card">
-    <h1>MOT Checker</h1>
+    <div class="title-wrapper">
+        <h1>MOT Checker</h1>
+    </div>
     <EditForm Model="@vehicleDetails" OnValidSubmit="@HandleSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <div>
-            <label for="inputValue">Enter Value:</label>
-            <InputText id="inputValue" @bind-Value="@registration" />
+        <div class="wrap">
+            <div class="search-wrapper">
+                <InputText class="search-bar" placeholder="Please Enter Your Registration" id="inputValue" @bind-Value="@registration" />
+                <button type="submit" class="search-button">
+                    <i class="fa fa-search"></i> Submit
+                </button>
+            </div>
         </div>
-        <button type="submit">Submit</button>
+      
     </EditForm>
     @if (vehicleDetails != null)
     {
-        <p>@vehicleDetails.Make</p>
-        <p>@vehicleDetails.Model</p>
-        <p>@vehicleDetails.PrimaryColour</p>
-        <p>@vehicleDetails.MotTests?[0].ExpiryDate</p>
-        <p>@vehicleDetails.MotTests?[0].OdometerValue</p>
+        <div class="card-text-wrapper">
+            <div><strong>Registration: </strong> @vehicleDetails.Registration</div>
+            <div><strong>Make: </strong> @vehicleDetails.Make</div>
+            <div><strong>Model: </strong> @vehicleDetails.Model</div>
+            <div><strong>Colour: </strong> @vehicleDetails.PrimaryColour</div>
+            <div><strong>MOT Expiry Date: </strong> @vehicleDetails.MotTests?[0].ExpiryDate</div>
+            <div><strong>Last Test Mileage: </strong>@vehicleDetails.MotTests?[0].OdometerValue</div>
+        </div>
     }
+
 </div>
 
 @code {
     private VehicleDetails vehicleDetails = new VehicleDetails();
-    private string registration;
+    private string registration = string.Empty;
 
     private async Task HandleSubmit()
     {
-        vehicleDetails = await VehicleService.GetData(registration);
-    }
-
-    private async Task GetData()
-    {
-        var httpClient = HttpClientFactory.CreateClient();
-        var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={registration}");
-
-        request.Headers.Add("x-api-key", "fZi8YcjrZN1cGkQeZP7Uaa4rTxua8HovaswPuIno");
-
-        //Submit request
-        var response = await httpClient.SendAsync(request);
-
-        if (response.IsSuccessStatusCode)
-        {        
-            var data = await response.Content.ReadFromJsonAsync<List<VehicleDetails>>();
-
-            if (data != null && data.Count > 0)
-            {
-                vehicleDetails = data[0];         
-            }
-        }
+        vehicleDetails = await VehicleService.GetMotData(registration);
     }
 }

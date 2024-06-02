@@ -7,8 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddHttpClient();
-builder.Services.AddSingleton<IVehicleService, VehicleService>();
+builder.Services.AddHttpClient<IVehicleService, VehicleService>();
 
 var app = builder.Build();
 

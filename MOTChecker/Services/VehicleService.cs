@@ -4,33 +4,36 @@ namespace MOTChecker.Services
 {
     public class VehicleService : IVehicleService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
+        private readonly HttpClient _httpClient;
 
-        public VehicleService(IHttpClientFactory httpClientFactory, IConfiguration configuration)
+        public VehicleService(HttpClient httpClient)
         {
-            _httpClientFactory = httpClientFactory;
-            _configuration = configuration;
+            _httpClient= httpClient;
         }
 
-        public async Task<VehicleDetails> GetData(string registration)
+        public async Task<VehicleDetails> GetMotData(string registration)
         {
-            var httpClient = _httpClientFactory.CreateClient();
-
-            var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={registration}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={registration.Replace(" ", "").ToUpper()}");
 
             request.Headers.Add("x-api-key", "fZi8YcjrZN1cGkQeZP7Uaa4rTxua8HovaswPuIno");
 
-            var response = await httpClient.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                var data = await response.Content.ReadFromJsonAsync<List<VehicleDetails>>();
+                var response = await _httpClient.SendAsync(request);
 
-                if (data != null && data.Count > 0)
+                if (response.IsSuccessStatusCode)
                 {
-                    return data[0];
+                    var data = await response.Content.ReadFromJsonAsync<List<VehicleDetails>>();
+
+                    if (data != null && data.Count > 0)
+                    {
+                        return data[0];
+                    }
                 }
+            }
+            catch(Exception ex) 
+            { 
+                throw new Exception(ex.ToString()); 
             }
 
             return null;
