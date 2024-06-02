@@ -5,6 +5,8 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOTChecker", "MOTChecker\MOTChecker.csproj", "{6C27F1B1-6B09-4B3C-AA38-60276A49BD67}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MOTChecker.Tests", "MOTChecker.Tests\MOTChecker.Tests.csproj", "{1107C06B-3A46-4462-A5AF-43A4D87EDACC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6C27F1B1-6B09-4B3C-AA38-60276A49BD67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C27F1B1-6B09-4B3C-AA38-60276A49BD67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C27F1B1-6B09-4B3C-AA38-60276A49BD67}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1107C06B-3A46-4462-A5AF-43A4D87EDACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1107C06B-3A46-4462-A5AF-43A4D87EDACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1107C06B-3A46-4462-A5AF-43A4D87EDACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1107C06B-3A46-4462-A5AF-43A4D87EDACC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,33 +1,48 @@
 ﻿@page "/"
 @using MOTChecker.Models
+@using MOTChecker.Services
 @using Newtonsoft.Json
 
 @rendermode InteractiveServer
 @inject IHttpClientFactory HttpClientFactory;
+@inject IVehicleService VehicleService
 
-<PageTitle>Home</PageTitle>
+<PageTitle>MOT Checker</PageTitle>
 
-<h1>MOT Checker</h1>
-<button @onclick="@GetData">Get Details</button>
-
-@if(vehicleDetails != null)
-{
-    <p>@vehicleDetails.Make</p>
-    <p>@vehicleDetails.Model</p>
-    <p>@vehicleDetails.PrimaryColour</p>
-    <p>@vehicleDetails.MotTests?[0].ExpiryDate</p>
-    <p>@vehicleDetails.MotTests?[0].OdometerValue</p>
-}
+<div class="card">
+    <h1>MOT Checker</h1>
+    <EditForm Model="@vehicleDetails" OnValidSubmit="@HandleSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div>
+            <label for="inputValue">Enter Value:</label>
+            <InputText id="inputValue" @bind-Value="@registration" />
+        </div>
+        <button type="submit">Submit</button>
+    </EditForm>
+    @if (vehicleDetails != null)
+    {
+        <p>@vehicleDetails.Make</p>
+        <p>@vehicleDetails.Model</p>
+        <p>@vehicleDetails.PrimaryColour</p>
+        <p>@vehicleDetails.MotTests?[0].ExpiryDate</p>
+        <p>@vehicleDetails.MotTests?[0].OdometerValue</p>
+    }
+</div>
 
 @code {
-    private VehicleDetails vehicleDetails;
-    private string myreg = "DS11EYX";
-    private string testResult = "";
+    private VehicleDetails vehicleDetails = new VehicleDetails();
+    private string registration;
+
+    private async Task HandleSubmit()
+    {
+        vehicleDetails = await VehicleService.GetData(registration);
+    }
 
     private async Task GetData()
     {
         var httpClient = HttpClientFactory.CreateClient();
-        var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={myreg}");
+        var request = new HttpRequestMessage(HttpMethod.Get, $"https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration={registration}");
 
         request.Headers.Add("x-api-key", "fZi8YcjrZN1cGkQeZP7Uaa4rTxua8HovaswPuIno");
 
@@ -35,14 +50,12 @@
         var response = await httpClient.SendAsync(request);
 
         if (response.IsSuccessStatusCode)
-        {
-            // falls over on this line           
+        {        
             var data = await response.Content.ReadFromJsonAsync<List<VehicleDetails>>();
 
             if (data != null && data.Count > 0)
             {
-                vehicleDetails = data[0]; // Assuming you want the first result
-                testResult = JsonConvert.SerializeObject(vehicleDetails, Formatting.Indented);               
+                vehicleDetails = data[0];         
             }
         }
     }

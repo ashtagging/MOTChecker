@@ -1,4 +1,5 @@
 using MOTChecker.Components;
+using MOTChecker.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddHttpClient();
+builder.Services.AddSingleton<IVehicleService, VehicleService>();
 
 var app = builder.Build();
 
