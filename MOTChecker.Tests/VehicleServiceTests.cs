@@ -2,6 +2,7 @@
 using MOTChecker.Models;
 using MOTChecker.Services;
 using NUnit.Framework;
+using RichardSzalay.MockHttp;
 
 namespace MOTChecker.Tests
 {
@@ -9,14 +10,13 @@ namespace MOTChecker.Tests
     public class VehicleServiceTests
     {
         private Mock<HttpMessageHandler> _httpMessageHandlerMock;
-        private HttpClient _httpClient;
-        private VehicleService _vehicleService;
+        private Mock<HttpClient> _httpClient;
+        private Mock<VehicleService> _vehicleService;
 
         [SetUp]
         public void SetUp()
         {
             _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
-            _httpClient = new HttpClient(_httpMessageHandlerMock.Object);
             _vehicleService = new VehicleService(_httpClient);
         }
 
@@ -25,7 +25,10 @@ namespace MOTChecker.Tests
         {
             // Arrange
             var registration = "HY09VLP";
+            var http = new MockHttpMessageHandler();
             var expectedUrl = "https://beta.check-mot.service.gov.uk/trade/vehicles/mot-tests?registration=HY09VLP";
+
+            
 
             // Act
             var result = await _vehicleService.GetMotData(registration);

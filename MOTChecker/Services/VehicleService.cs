@@ -33,10 +33,12 @@ namespace MOTChecker.Services
             }
             catch(Exception ex) 
             { 
-                throw new Exception(ex.ToString()); 
+                throw new Exception(ex.ToString());
+                
             }
 
             return null;
+
         }
     }
 }
