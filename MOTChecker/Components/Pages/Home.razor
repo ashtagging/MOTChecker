@@ -13,19 +13,19 @@
         <h1>MOT Checker</h1>
     </div>
     <EditForm Model="@vehicleDetails" OnValidSubmit="@HandleSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
         <div class="wrap">
             <div class="search-wrapper">
-                <InputText class="search-bar" placeholder="Please Enter Your Registration" id="inputValue" @bind-Value="@registration" />
+                <InputText class="search-bar" placeholder="Please Enter Your Registration" id="inputValue" @bind-Value="@registrationModel.Registration" />
                 <button type="submit" class="search-button">
                     <i class="fa fa-search"></i> Submit
                 </button>
             </div>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
         </div>
       
     </EditForm>
-    @if (!string.IsNullOrEmpty(registration) && vehicleDetails != null)
+    @if (!string.IsNullOrEmpty(registrationModel.Registration) && vehicleDetails != null)
     {
         <div class="card-text-wrapper">
             <div><strong>Registration: </strong> @vehicleDetails.Registration</div>
@@ -41,10 +41,10 @@
 
 @code {
     private VehicleDetails vehicleDetails = new VehicleDetails();
-    private string registration = string.Empty;
+    private RegistrationModel registrationModel = new RegistrationModel();
 
     private async Task HandleSubmit()
     {
-        vehicleDetails = await VehicleService.GetMotData(registration);
+        vehicleDetails = await VehicleService.GetMotData(registrationModel.Registration);
     }
 }

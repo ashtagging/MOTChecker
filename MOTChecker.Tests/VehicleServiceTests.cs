@@ -10,8 +10,8 @@ namespace MOTChecker.Tests
     public class VehicleServiceTests
     {
         private Mock<HttpMessageHandler> _httpMessageHandlerMock;
-        private Mock<HttpClient> _httpClient;
-        private Mock<VehicleService> _vehicleService;
+        private HttpClient _httpClient;
+        private VehicleService _vehicleService;
 
         [SetUp]
         public void SetUp()
